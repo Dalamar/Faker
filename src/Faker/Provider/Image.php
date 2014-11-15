@@ -17,7 +17,7 @@ class Image extends Base
      *
      * @example 'http://lorempixel.com/640/480/'
      */
-    public static function imageUrl($width = 640, $height = 480, $category = null)
+    public static function imageUrl($width = 640, $height = 480, $category = null, $number = null, $text = null)
     {
         $url = "http://lorempixel.com/{$width}/{$height}/";
         if ($category) {
@@ -25,6 +25,21 @@ class Image extends Base
                 throw new \InvalidArgumentException(sprintf('Unkown image category "%s"', $category));
             }
             $url .= "{$category}/";
+        }
+
+        if ($number) {
+            $options = array(
+                'min_range' => 1,
+                'max_range' => 10
+            );
+            if (!filter_var($number, FILTER_VALIDATE_INT, $options)) {
+                throw new \InvalidArgumentException('Image number should be between 1 and 10');
+            }
+            $url .= "{$number}/";
+        }
+
+        if ($text) {
+            $url .= "{$text}/";
         }
 
         return $url;
